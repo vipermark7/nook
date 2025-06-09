@@ -1,64 +1,485 @@
-<header>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-1 col-sm-2 col-xs-2 logo">
-        <a href="<%= rootPath() %>"><img src="<%= rootPath() %>assets/images/logo.svg" alt=""></a>
-      </div>
-      <div class="col-md-9 col-sm-9 col-xs-10 titles">
-        <h1><%= t("welcome_greeting") %></h1>
-        <h2>
-          <a href="https://github.com/gobuffalo/buffalo"><i class="fab fa-github" aria-hidden="true"></i> https://github.com/gobuffalo/buffalo</a>
-        </h2>
-        <h2 class="documentation">
-          <a href="http://gobuffalo.io/"><i class="fa fa-book" aria-hidden="true"></i> Documentation</a>
-        </h2>
-      </div>
-    </div>
-  </div>
 
-</header>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="subtitle">
-      <div class="container">
-        <h3>Defined Routes</h3>
-      </div>
-    </div>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr text-align="left">
-            <th class="centered">METHOD</th>
-            <th>PATH</th>
-            <th>NAME</th>
-            <th>HANDLER</th>
-          </tr>
-        </thead>
-        <tbody>
+<head>
+  
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  
+  <title>Nook</title>
+  
+  
+<!-- Primary Meta Tags -->
+<meta name="title" content="ʕ•ᴥ•ʔ Nook">
+<meta name="description" content="Free, no-nonsense, super-fast blogging">
 
-          <%= for (r) in routes { %>
-            <tr>
-              <td class="centered">
-                <%= r.Method %>
-              </td>
-              <td>
-                <%= if (r.Method != "GET" || r.Path ~= "{") { %><%=
-                  r.Path %><%
-                } else { %><%=
-                  linkTo(r.Path, {body: r.Path}) %><%
-                } %>
-              </td>
-              <td>
-                <%= r.PathName %>
-              </td>
-              <td><code><%= r.HandlerName %></code></td>
-            </tr>
-          <% } %>
+  <link rel="icon" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
+  
 
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<div class="foot"> <span> Powered by <a href="http://gobuffalo.io/">gobuffalo.io</a></span> </div>
+  <style>
+      
+      
+        :root {
+    --width: 800px;
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+    --background-color: #fff;
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color:  #8b6fcb;
+    --code-background-color: #f2f2f2;
+    --code-color: #222;
+    --blockquote-color: #222;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #01242e;
+        --heading-color: #eee;
+        --text-color: #ddd;
+        --link-color: #8cc2dd;
+        --visited-color:  #8b6fcb;
+        --code-background-color: #000;
+        --code-color: #ddd;
+        --blockquote-color: #ccc;
+    }
+}
+
+body {
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+    text-align: left;
+    background-color: var(--background-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-main);
+    color: var(--heading-color);
+}
+
+a {
+    color: var(--link-color);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline; 
+}
+
+nav a {
+    margin-right: 8px;
+}
+
+strong, b {
+    color: var(--heading-color);
+}
+
+button {
+    margin: 0;
+    cursor: pointer;
+}
+
+main {
+    line-height: 1.6;
+}
+
+table {
+    width: 100%;
+}
+
+hr {
+    border: 0;
+    border-top: 1px dashed;
+}
+
+img {
+    max-width: 100%;
+}
+
+code {
+    font-family: monospace;
+    padding: 2px;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
+    border-radius: 3px;
+}
+
+blockquote {
+    border-left: 1px solid #999;
+    color: var(--code-color);
+    padding-left: 20px;
+    font-style: italic;
+}
+
+footer {
+    padding: 25px 0;
+    text-align: center;
+}
+
+.title:hover {
+    text-decoration: none;
+}
+
+.title h1 {
+    font-size: 1.5em;
+}
+
+.inline {
+    width: auto !important;
+}
+
+.highlight, .code {
+    padding: 1px 15px;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
+    border-radius: 3px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    overflow-x: auto;
+}
+
+/* blog post list */
+ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+}
+
+ul.blog-posts li {
+    display: flex;
+}
+
+ul.blog-posts li span {
+    flex: 0 0 130px;
+}
+
+ul.blog-posts li a:visited {
+    color: var(--visited-color);
+}
+        .bear {
+    font-weight: 400;
+    font-family:  "Lucida", monospace;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.flex::before {
+    content: "ᕦʕ •ᴥ•ʔᕤ";
+    animation: blink 10s infinite;
+}
+
+.flex:hover::before {
+    content: "ᕙʕ ಠᴥಠʔᕗ";
+    animation: none;
+}
+
+.upgrade:hover .flex::before {
+    content: "ᕙʕ ಠᴥಠʔᕗ";
+    animation: none;
+    text-decoration: underline;
+}
+
+@keyframes blink {
+    0%, 96% { content: "ᕦʕ •ᴥ•ʔᕤ"; }
+    97%, 100% { content: "ᕦʕ -ᴥ-ʔᕤ"; }
+}
+
+a.account:hover {
+    text-decoration: none;
+}
+
+a.account::before {
+    content: "ʕ-ᴥ-ʔ";
+}
+
+.account:hover::before {
+    content: "ʕ•ᴥ•ʔ";
+}
+
+header nav {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+header nav a:last-child {
+    margin-right: 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+time {
+    font-family: monospace;
+    font-size: 15px;
+}
+
+textarea,
+input:not([type="submit"]),
+.editable {
+    background-color: #eceff4;
+    border: none;
+    line-height: 1.7;
+    outline: none;
+    color: inherit;
+    padding: 10px;
+    font-size: 18px;
+}
+
+@media (prefers-color-scheme: dark) {
+    textarea,
+    input:not([type="submit"]),
+    .editable {
+        background-color: #004052;
+    }
+}
+
+.full-width textarea,
+.full-width input:not([type="submit"], [type="checkbox"], [type="radio"]) {
+    width: calc(100% - 20px);
+}
+
+textarea:required,
+input:required:not([type="submit"]){
+    border-left: 1px solid #f99f9f;
+}
+
+input[type='checkbox'], input[type='radio'] {
+    height: 15px;
+    margin-right: 10px;
+}
+
+button {
+    margin: 5px 0;
+}
+
+button.floating {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+}
+
+button#toggle-full-screen {
+    float: right;
+}
+
+.sticky-controls {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    line-height: 0;
+    z-index: 10;
+}
+
+.helptext {
+    display: flex;
+    justify-content: space-between;
+    color: #777;
+    font-size: small;
+}
+
+.helptext.sticky {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding: 3px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+    .helptext.sticky,
+    .sticky-controls {
+        background-color: var(--background-color);
+    }
+}
+
+.errorlist {
+    color: #eba613;
+    font-size: small;
+}
+
+#date-range{
+    display: none;
+}
+
+#date-range:target{
+    display: block;
+}
+
+.notification {
+    width: 100%;
+    text-align: left;
+    padding: 5px 0;
+    margin-bottom: -15px;
+}
+
+.notification a {
+    margin: 0;
+}
+
+/* dashboard post list and analytics */
+ul.post-list {
+    list-style-type: none;
+    padding: unset;
+}
+
+ul.post-list li {
+    display: flex;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid #eceff4;
+}
+
+ul.post-list li span {
+    flex: 0 0 130px;
+}
+
+ul.post-list li span.number {
+    flex: 0 0 50px;
+}
+
+ul.post-list li small {
+    text-align: right;
+    flex: 0 0 115px;
+}
+
+/* media center */
+
+.media-container {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 5px;
+}
+.media-item {
+    text-align: center;
+    background-color: #eceff4;
+    position: relative;
+}
+.media-checkbox {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin: 0 !important;
+    height: unset !important;
+}
+
+/* discovery feed */
+ul.discover-posts {
+    list-style-type: none;
+    padding: unset;
+}
+
+ul.discover-posts li {
+    display: flex;
+    flex-flow: row no-wrap;
+    gap: 10px;
+    line-height: 1.2;
+    position: relative;
+}
+
+ul.discover-posts li span {
+    flex: 0 0 30px;
+}
+
+ul.discover-posts li a:visited {
+  color: #8b6fcb;
+}
+
+ul.discover-posts li div {
+    padding-bottom: 10px;
+}
+
+ul.discover-posts li small span, ul.discover-posts li small span a {
+    color: #777 !important;
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+    .helptext {
+        color: #aaa;
+    }
+}
+      
+      
+  </style>
+
+  
+</head>
+
+<body class="" onload="(function() { document.cookie = `timezone=${Intl.DateTimeFormat().resolvedOptions().timeZone};path=/`; })()">
+  
+  <header>
+    <a class="title" href="/">
+      <h1>
+        
+        <span class="bear">ʕ•ᴥ•ʔ</span> Bear
+        
+      </h1>
+    </a>
+    <nav>
+      
+
+    </nav>
+  </header>
+  <main>
+    
+<h2 style="font-size: 1.34em">A privacy-first, no-nonsense, super-fast blogging platform</h2>
+<h3>No trackers, no javascript, no stylesheets. Just your words.</h3>
+<nav>
+    
+    <a href="/signup/">Sign up</a>
+    <a href="/accounts/login/">Log in</a>
+    
+    <a href="/discover/">Discover</a>
+</nav>
+<p>
+    This is a blogging platform where words matter most.
+</p>
+<h4>
+    Shun the bloat of the current web, embrace the <i>bear</i> necessities.
+</h4>
+<ul>
+    <li>Looks great on <b>any</b> device</li>
+    <li>Tiny (~2.7kb), optimized, and awesome pages</li>
+    <li>No trackers, ads, or scripts</li>
+    <li>Seconds to sign up</li>
+    <li>Connect your custom domain</li>
+    <li>Built to last forever<sup><a href="https://herman.bearblog.dev/manifesto/" target="_blank">*</a></sup></li>
+</ul>
+<p><a href="https://herman.bearblog.dev" target="_blank">View example blog</a></p>
+<h3>
+   Create your own cozy corner of the Internet! :)
+   <a class="bear flex" href="https://herman.bearblog.dev/praise-for-bear/" target="_blank" style="text-decoration: none; color: inherit;"></a>
+</h3>
+
+
+  </main>
+  <footer style="padding:25px 0;">
+    
+    <p>
+    <i>Built and maintained by <a href="https://herman.bearblog.dev">Herman</a>.</i>
+</p>
+<small>
+    <a href="https://docs.bearblog.dev/privacy-policy" target="_blank">Privacy Policy</a> | 
+    <a href="https://docs.bearblog.dev/terms-of-service" target="_blank">Terms of Service</a> |
+    <a href="https://github.com/HermanMartinus/bearblog/" target="_blank">GitHub</a> |
+    <a href="https://docs.bearblog.dev/" target="_blank">Docs</a> |
+    <a href="https://bear.nolt.io/roadmap" target="_blank">Roadmap</a>
+</small>
+    
+  </footer>
+</body>
+</html>
