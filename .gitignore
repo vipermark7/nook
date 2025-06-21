@@ -30,3 +30,12 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/nook.iml
+/.idea/vcs.xml
+/nook-blog/.idea/misc.xml
+/nook-blog/.idea/modules.xml
+/nook-blog/.idea/nook-blog.iml
+/nook-blog/.idea/vcs.xml
+/nook-blog/.idea/workspace.xml
