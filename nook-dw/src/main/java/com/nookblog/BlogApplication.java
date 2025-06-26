@@ -7,13 +7,14 @@ import com.nookblog.db.BlogDAO;
 import com.nookblog.db.PostDAO;
 import com.nookblog.db.UserDAO;
 import com.nookblog.resources.*;
-import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import io.dropwizard.views.ViewBundle;
+
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
+import io.dropwizard.views.common.ViewBundle;
 import io.dropwizard.assets.AssetsBundle;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 

@@ -1,7 +1,7 @@
 package com.nookblog.views;
 
 import com.nookblog.core.Post;
-import io.dropwizard.views.View;
+import io.dropwizard.views.common.View;
 
 
 public class PostFormView extends View {

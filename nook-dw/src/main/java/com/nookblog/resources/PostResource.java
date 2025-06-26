@@ -7,12 +7,13 @@ import com.nookblog.db.BlogDAO;
 import com.nookblog.db.PostDAO;
 import com.nookblog.views.PostFormView;
 import io.dropwizard.auth.Auth;
-import io.dropwizard.views.View;
+import io.dropwizard.views.common.View;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 import java.net.URI;
 
 @Path("/posts")
@@ -45,9 +46,9 @@ public class PostResource {
     @RolesAllowed("USER")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createPost(@Auth User user,
-                              @FormParam("blogId") Long blogId,
-                              @FormParam("title") String title,
-                              @FormParam("content") String content) {
+                               @FormParam("blogId") Long blogId,
+                               @FormParam("title") String title,
+                               @FormParam("content") String content) {
         Blog blog = blogDAO.findById(blogId);
         if (blog == null) {
             throw new WebApplicationException(404);

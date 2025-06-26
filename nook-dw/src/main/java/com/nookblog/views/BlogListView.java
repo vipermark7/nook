@@ -3,7 +3,7 @@ package com.nookblog.views;
 import com.nookblog.core.Blog;
 import com.nookblog.core.User;
 import com.nookblog.db.UserDAO;
-import io.dropwizard.views.View;
+import io.dropwizard.views.common.View;
 import java.util.List;
 import java.util.ArrayList;
 

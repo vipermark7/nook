@@ -1,6 +1,6 @@
 package com.nookblog.views;
 
-import io.dropwizard.views.View;
+import io.dropwizard.views.common.View;
 
 public class LoginView extends View {
     private final String error;

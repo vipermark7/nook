@@ -1,7 +1,8 @@
 package com.nookblog;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.core.Configuration;
+
 import javax.validation.constraints.NotEmpty;
 
 public class BlogConfiguration extends Configuration {
