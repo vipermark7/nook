@@ -7,10 +7,9 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/")
-@Produces(MediaType.TEXT_HTML)
 public class HomeResource {
-
     @GET
+    @Produces(MediaType.TEXT_HTML)
     public HomeView getHome() {
         return new HomeView();
     }

@@ -46,6 +46,7 @@ public class NookApplication extends Application<NookConfiguration> {
 
     @Override
     public void run(NookConfiguration conf, Environment env) {
+        System.out.println("run called!!!");
         // Initialize DAOs (using in-memory storage for simplicity)
         final var userDAO = new UserDAO();
         final var blogDAO = new BlogDAO();
