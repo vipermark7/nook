@@ -15,13 +15,16 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.views.common.ViewBundle;
-import io.dropwizard.assets.AssetsBundle;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Map;
 
-public class BlogApplication extends Application<BlogConfiguration> {
+public class NookApplication extends Application<NookConfiguration> {
+    Logger logger = LoggerFactory.getLogger("logger");
 
     public static void main(String[] args) throws Exception {
-        new BlogApplication().run(args);
+        new NookApplication().run(args);
     }
 
     @Override
@@ -30,13 +33,19 @@ public class BlogApplication extends Application<BlogConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<BlogConfiguration> bootstrap) {
-        bootstrap.addBundle(new ViewBundle<>());
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/assets/"));
+    public void initialize(Bootstrap<NookConfiguration> bootstrap) {
+        bootstrap.addBundle(new ViewBundle<>() {
+            @Override
+            public Map<String, Map<String, String>> getViewConfiguration(NookConfiguration config) {
+                logger.info("CONF: {}", config.getViewRendererConfiguration());
+
+                return config.getViewRendererConfiguration();
+            }
+        });
     }
 
     @Override
-    public void run(BlogConfiguration conf, Environment env) {
+    public void run(NookConfiguration conf, Environment env) {
         // Initialize DAOs (using in-memory storage for simplicity)
         final var userDAO = new UserDAO();
         final var blogDAO = new BlogDAO();
@@ -48,7 +57,7 @@ public class BlogApplication extends Application<BlogConfiguration> {
                 new BasicCredentialAuthFilter.Builder<User>()
                         .setAuthenticator(new BasicAuthenticator(userDAO))
                         .setAuthorizer(new BasicAuthorizer())
-                        .setRealm("Blog Application")
+                        .setRealm("Nook Blog")
                         .buildAuthFilter()));
 
         env.jersey().register(RolesAllowedDynamicFeature.class);
@@ -62,7 +71,6 @@ public class BlogApplication extends Application<BlogConfiguration> {
     }
 
     private void createTestData(UserDAO userDAO, BlogDAO blogDAO, PostDAO postDAO) {
-        // Create test users
         User user1 = new User("john@example.com", "password123", "John Doe");
         User user2 = new User("jane@example.com", "password123", "Jane Smith");
 

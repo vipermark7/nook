@@ -47,7 +47,7 @@ blog-application/
 │       │           ├── ProfileView.java
 │       │           └── ErrorView.java
 │       └── resources/
-│           └── com/nookblog/views/           # Mustache templates
+│           └── views/           # Mustache templates
 │               ├── base.mustache
 │               ├── home.mustache
 │               ├── login.mustache
@@ -77,7 +77,7 @@ blog-application/
 
 3. **Run the application**:
    ```bash
-   java -jar target/nookblog-0.1.jar server config.yml
+   java -jar .\out\artifacts\nookblog_jar\nookblog.jar server config.yml
    ```
 
 4. **Access the application**:
