@@ -6,15 +6,13 @@ import com.nookblog.cli.RenderCommand;
 import com.nookblog.core.Person;
 import com.nookblog.core.Template;
 import com.nookblog.core.User;
+import com.nookblog.db.BlogDAO;
 import com.nookblog.db.PersonDAO;
+import com.nookblog.db.PostDAO;
+import com.nookblog.db.UserDAO;
 import com.nookblog.filter.DateRequiredFeature;
 import com.nookblog.health.TemplateHealthCheck;
-import com.nookblog.resources.FilteredResource;
-import com.nookblog.resources.HelloWorldResource;
-import com.nookblog.resources.PeopleResource;
-import com.nookblog.resources.PersonResource;
-import com.nookblog.resources.ProtectedResource;
-import com.nookblog.resources.ViewResource;
+import com.nookblog.resources.*;
 import com.nookblog.tasks.EchoTask;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -79,25 +77,53 @@ public class NookApplication extends Application<NookConfiguration> {
     }
 
     @Override
-    public void run(NookConfiguration configuration, Environment environment) {
-        final PersonDAO dao = new PersonDAO(hibernateBundle.getSessionFactory());
-        final Template template = configuration.buildTemplate();
+    public void run(NookConfiguration conf, Environment env) {
+        // Initialize DAOs (using in-memory storage for simplicity)
+        final var userDAO = new UserDAO();
+        final var blogDAO = new BlogDAO();
+        final var postDAO = new PostDAO();
 
-        environment.healthChecks().register("template", new TemplateHealthCheck(template));
-        environment.admin().addTask(new EchoTask());
-        environment.jersey().register(DateRequiredFeature.class);
-        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
+        createTestData(userDAO, blogDAO, postDAO);
+
+        final Template template = conf.buildTemplate();
+
+        env.healthChecks().register("template", new TemplateHealthCheck(template));
+        env.admin().addTask(new EchoTask());
+        env.jersey().register(DateRequiredFeature.class);
+        env.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(new ExampleAuthenticator())
                 .setAuthorizer(new ExampleAuthorizer())
                 .setRealm("SUPER SECRET STUFF")
                 .buildAuthFilter()));
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
-        environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new HelloWorldResource(template));
-        environment.jersey().register(new ViewResource());
-        environment.jersey().register(new ProtectedResource());
-        environment.jersey().register(new PeopleResource(dao));
-        environment.jersey().register(new PersonResource(dao));
-        environment.jersey().register(new FilteredResource());
+        env.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        env.jersey().register(RolesAllowedDynamicFeature.class);
+        env.jersey().register(new HelloWorldResource(template));
+
+        env.jersey().register(new ViewResource());
+        env.jersey().register(new ProtectedResource());
+        env.jersey().register(new FilteredResource());
+        env.jersey().register(new HomeResource());
+        env.jersey().register(new LoginResource(userDAO));
+        env.jersey().register(new BlogResource(blogDAO, postDAO, userDAO));
+        env.jersey().register(new PostResource(postDAO, blogDAO));
+        env.jersey().register(new UserResource(blogDAO));
+    }
+
+    private void createTestData(UserDAO userDAO, BlogDAO blogDAO, PostDAO postDAO) {
+        User user1 = new User("user1");
+        User user2 = new User("user2");
+
+        userDAO.create(user1);
+        userDAO.create(user2);
+
+        blogDAO.create((long) user1.getId(), "John's Tech Blog", "Thoughts on technology and programming");
+        blogDAO.create((long) user2.getId(), "Jane's Travel Blog", "Adventures around the world");
+
+        postDAO.create(1L, "Getting Started with Dropwizard",
+                "Dropwizard is a fantastic framework for building RESTful web services...");
+        postDAO.create(1L, "Java Best Practices",
+                "Here are some important best practices when writing Java code...");
+        postDAO.create(2L, "My Trip to Paris",
+                "Paris is an amazing city with so much history and culture...");
     }
 }

@@ -1,0 +1,22 @@
+{{< base}}
+{{$content}}
+<div class="container">
+    <h1>All Blogs</h1>
+    
+    {{#blogsWithUsers}}
+    <div class="card">
+        <h2><a href="/blogs/{{blog.id}}" style="color: #333;">{{blog.title}}</a></h2>
+        <p class="post-meta">by {{user.name}}</p>
+        <p>{{blog.description}}</p>
+        <a href="/blogs/{{blog.id}}" class="btn">View Blog</a>
+    </div>
+    {{/blogsWithUsers}}
+    
+    {{^blogsWithUsers}}
+    <div class="card">
+        <p>No blogs yet. Be the first to create one!</p>
+    </div>
+    {{/blogsWithUsers}}
+</div>
+{{/content}}
+{{/ base}}
