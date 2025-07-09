@@ -1,40 +1,46 @@
-val h2_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-val postgres_version: String by project
-
 plugins {
-    kotlin("jvm") version "2.1.10"
-    id("io.ktor.plugin") version "3.2.1"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
+    kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
+    application
 }
 
 group = "com.nookblog"
 version = "0.0.1"
 
 application {
-    mainClass = "io.ktor.server.netty.EngineMain"
+    mainClass.set("com.nookblog.ApplicationKt")
 }
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://packages.confluent.io/maven/") }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core")
-    implementation("io.ktor:ktor-server-openapi")
-    implementation("com.ucasoft.ktor:ktor-simple-cache:0.55.3")
-    implementation("io.ktor:ktor-server-content-negotiation")
-    implementation("io.ktor:ktor-serialization-jackson")
-    implementation("io.ktor:ktor-server-thymeleaf")
-    implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation("org.postgresql:postgresql:$postgres_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("io.github.flaxoos:ktor-server-rate-limiting:2.2.1")
-    implementation("io.ktor:ktor-server-netty")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml")
-    testImplementation("io.ktor:ktor-server-test-host")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("io.ktor:ktor-server-core-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-netty-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:2.3.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-auth-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-call-logging-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-cors-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-status-pages-jvm:2.3.4")
+    implementation("io.ktor:ktor-server-rate-limit-jvm:2.3.4")
+
+
+    // Database
+    implementation("org.jetbrains.exposed:exposed-core:0.42.0")
+    implementation("org.jetbrains.exposed:exposed-dao:0.42.0")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.42.0")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.42.0")
+    implementation("com.h2database:h2:2.2.220")
+
+    // Password hashing
+    implementation("org.mindrot:jbcrypt:0.4")
+
+    // Logging
+    implementation("ch.qos.logback:logback-classic:1.4.11")
+
+    testImplementation("io.ktor:ktor-server-tests-jvm:2.3.4")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
 }
