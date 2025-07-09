@@ -5,6 +5,6 @@ import io.ktor.server.routing.*
 
 fun Application.configureHTTP() {
     routing {
-        openAPI(path = "openapi")
+        //openAPI(path = "openapi")
     }
 }
